@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: report_db
+    ports:
+      - '5432:5432'
+
+  node:
+    image: node:latest
+    restart: always
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - '3000:3000'
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=user
+      - DB_PASS=password
+      - DB_NAME=report_db
+    command: bash -c 'npm install && npm start'
